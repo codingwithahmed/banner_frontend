@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap');
+
+
+body {
+    background-color: black;  
+    color: white; 
+    font-family: 'Poppins', sans-serif;
+    @apply scroll-smooth;
+}
+
+  
+
+.main-btn {
+    padding: 13px 32px;
+    background: linear-gradient(148.21deg, #17DAE3 5.56%, #003DFF 91.15%);
+    border-radius: 36px;
+}
+
+.bg-main {
+    background: linear-gradient(148.21deg, #17DAE3 5.56%, #003DFF 91.15%);
+}
+
+.border-b-color {
+    border-image-source :  linear-gradient(148.21deg, #17DAE3 5.56%, #003DFF 91.15%);
+    border-image-slice: 1;
+    border-bottom-left-radius: 100%;
+    border-bottom-right-radius: 100%;
+
+}
+
+
+.bg-color {
+    background :  linear-gradient(148.21deg, #17DAE3 5.56%, #003DFF 91.15%);
+    border-image-slice: 1;
+
+}
+
+
+.text-main {
+    background: linear-gradient(134.23deg, #17DAE3 57.47%, #003DFF 90.77%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+text-fill-color: transparent;
+}
+
+.tag-item {
+    background: #171A24;
+    border-radius: 6px;
+    margin: 2.5% 0;
+}
+
+.somthing-bg {
+    background: linear-gradient(148.21deg, rgba(23, 217, 227, 0.1) 5.56%, rgba(0, 60, 255, 0.1) 91.15%);
+border-radius: 15px;
+}
+
+.somthing-bg-hover :hover {
+    background: linear-gradient(148.21deg, rgba(23, 217, 227, 0.1) 5.56%, rgba(0, 60, 255, 0.1) 91.15%);
+border-radius: 15px;
+}
+
+.sh {
+    background: linear-gradient(148.21deg, #00474A 5.56%, #001B73 91.15%);
+border-radius: 16px;
+}
+
+.contact-input {
+    background: rgba(22, 210, 228, 0.1);
+border: 1px solid rgba(58, 58, 58, 0.2);
+border-radius: 6px;
+}
