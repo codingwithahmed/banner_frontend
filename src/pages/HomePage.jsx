@@ -43,6 +43,7 @@ function HomePage() {
   const [taskId, setTaskId] = useState("");
   const [midjourney, setMidjourney] = useState(true);
   const [stableDiffusion, setStableDiffusion] = useState(false);
+  const [text, setText] = useState("");
 
   const handleUserMail = useCallback((e) => {
     setUserMail(e.target.value);
@@ -283,21 +284,6 @@ function HomePage() {
     setPrompt(e.target.value);
   };
 
-  const convertBase64 = (img) => {
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(img);
-
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      };
-
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
-    });
-  };
-
   const handleGenrate = (e) => {
     try {
       //   const response =   await sendAccountBalance()
@@ -354,6 +340,7 @@ function HomePage() {
                 }
               )
               .then((res) => {
+                setText("It will take atleast 1 minute to generate the image");
                 console.log(res.data.errors?.[0].msg);
                 console.log(res.data.taskId);
                 setTaskId(res.data.taskId);
@@ -372,6 +359,7 @@ function HomePage() {
                       }
                     )
                     .then((res) => {
+                      setText("")
                       setRequestStart(false);
                       setGenratedImage(res.data.imageURL);
                       console.log(res.data);
@@ -681,63 +669,63 @@ function HomePage() {
             </>
           )}
         </div>
-          <div className="lg:col-start-10 lg:hidden z-10 flex -ml-72 lg:-ml-0 flex-row justify-between items-start lg:col-span-2">
-            {walletAddress ? (
-              <div className="flex -ml-16 lg:-ml-0">
-                {" "}
-                <WalletModalProvider>
-                  {wallet && walletName == "Phantom" ? (
-                    <WalletDisconnectButton className="" />
-                  ) : (walletName == "MetaMask") == "" ? (
-                    ""
-                  ) : (
-                    <button
-                      onClick={() => {
-                        setWalletAddress("");
-                        setWalletName("");
-                      }}
-                      className="main-btn"
-                    >
-                      Disconnect
-                    </button>
-                  )}
-                </WalletModalProvider>{" "}
-                <a
-                  href="#my-modal-2"
-                  className="main-btn lg:mx-3 whitespace-nowrap"
-                >
-                  Create
-                </a>{" "}
-              </div>
-            ) : (
-              <>
-                <div className="dropdown z-[999]  p-4">
-                  <label tabIndex={0} className="main-btn whitespace-nowrap">
-                    Connect Wallet
-                  </label>
-                  <ul
-                    tabIndex={0}
-                    className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+        <div className="lg:col-start-10 lg:hidden z-10 flex -ml-72 lg:-ml-0 flex-row justify-between items-start lg:col-span-2">
+          {walletAddress ? (
+            <div className="flex -ml-16 lg:-ml-0">
+              {" "}
+              <WalletModalProvider>
+                {wallet && walletName == "Phantom" ? (
+                  <WalletDisconnectButton className="" />
+                ) : (walletName == "MetaMask") == "" ? (
+                  ""
+                ) : (
+                  <button
+                    onClick={() => {
+                      setWalletAddress("");
+                      setWalletName("");
+                    }}
+                    className="main-btn"
                   >
-                    <li>
-                      <a onClick={connectWalletMetamask} className="text-black">
-                        MetaMask{" "}
-                      </a>
-                    </li>
-                    <li>
-                      <WalletModalProvider>
-                        {wallet ? (
-                          <WalletDisconnectButton />
-                        ) : (
-                          <WalletMultiButton children={"Solana Wallet"} />
-                        )}
-                      </WalletModalProvider>{" "}
-                    </li>
-                  </ul>
-                </div>
-              </>
-            )}
-          </div>
+                    Disconnect
+                  </button>
+                )}
+              </WalletModalProvider>{" "}
+              <a
+                href="#my-modal-2"
+                className="main-btn lg:mx-3 whitespace-nowrap"
+              >
+                Create
+              </a>{" "}
+            </div>
+          ) : (
+            <>
+              <div className="dropdown z-[999]  p-4">
+                <label tabIndex={0} className="main-btn whitespace-nowrap">
+                  Connect Wallet
+                </label>
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+                >
+                  <li>
+                    <a onClick={connectWalletMetamask} className="text-black">
+                      MetaMask{" "}
+                    </a>
+                  </li>
+                  <li>
+                    <WalletModalProvider>
+                      {wallet ? (
+                        <WalletDisconnectButton />
+                      ) : (
+                        <WalletMultiButton children={"Solana Wallet"} />
+                      )}
+                    </WalletModalProvider>{" "}
+                  </li>
+                </ul>
+              </div>
+            </>
+          )}
+        </div>
       </header>
 
       <div>
@@ -852,7 +840,7 @@ function HomePage() {
             >
               Generate Banner
             </button>
-
+            <div>{text && <h1 className="text-center text-white my-3">{text}</h1>}</div>
             <div className="text-white flex justify-evenly items-center">
               <div className="mb-[0.125rem] block min-h-[1.5rem] pl-[1.5rem]">
                 <input
@@ -945,6 +933,7 @@ function HomePage() {
 
             <a
               onClick={() => {
+                setText("")
                 setGenratedImage("");
                 setPrompt("");
               }}
