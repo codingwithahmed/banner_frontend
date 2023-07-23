@@ -1,10 +1,14 @@
+import axios from 'axios';
 import React, { useState , useRef, useEffect} from 'react';
 import { Stage, Layer, Image, Group, Transformer } from 'react-konva';
 
 function App({
   fg,
   bg,
-  setGenratedImage
+  setGenratedImage,
+  genratedImage, 
+  prompt,
+  publicKey
 }) {
   const [selectedId, setSelectedId] = useState(null);
   const [image, setImage] = useState(null);
@@ -51,6 +55,11 @@ function App({
     setBgImage(imgBg)
     console.log("Image \t",imgBg  )
   }
+  const imgBg = new window.Image()
+  imgBg.src = bg
+  imgBg.crossOrigin="anonymous"
+  setBgImage(imgBg)
+  console.log("Image \t",imgBg  )
 
   },[fg,bg])
 
@@ -61,6 +70,23 @@ function App({
 
     // get the stage as image data url
     const stageDataUrl = ref.current.toDataURL();
+    axios
+      .post(
+        `http://localhost:5000/api/image/${publicKey}`,
+        {
+          image: genratedImage,
+          prompt: prompt,
+        },
+        {
+          maxBodyLength: Infinity,
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        // setTaskId("");
+        // setGenratedImage(stageDataUrl)
+      });
+
     setGenratedImage(stageDataUrl)
 
     console.log(stageDataUrl.toDataURL());

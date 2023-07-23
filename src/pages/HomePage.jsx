@@ -309,19 +309,10 @@ function HomePage() {
                 },
               })
               .then((res) => {
-                console.log(res);
+                console.log(res.data.output_url);
                 setRequestStart(false);
                 setGenratedImage(res.data.output_url);
-                // console.log(res.data);
-                axios
-                  .post(`http://localhost:5000/api/image/${publicKey}`, {
-                    image: res.data.output_url,
-                    prompt: prompt,
-                  })
-                  .then((res) => {
-                    console.log(res);
-                    // setTaskId("");
-                  });
+                // console.log(genratedImage);
               });
             return;
           }
@@ -341,7 +332,6 @@ function HomePage() {
               )
               .then((res) => {
                 setText("It will take atleast 1 minute to generate the image");
-                console.log(res.data.errors?.[0].msg);
                 console.log(res.data.taskId);
                 setTaskId(res.data.taskId);
                 setTimeout(() => {
@@ -359,19 +349,11 @@ function HomePage() {
                       }
                     )
                     .then((res) => {
-                      setText("")
+                      setText("");
                       setRequestStart(false);
                       setGenratedImage(res.data.imageURL);
-                      console.log(res.data);
-                      axios
-                        .post(`http://localhost:5000/api/image/${publicKey}`, {
-                          image: res.data.imageURL,
-                          prompt: prompt,
-                        })
-                        .then((res) => {
-                          console.log(res);
-                          setTaskId("");
-                        });
+                      // console.log(res.data.imageURL);
+                      // console.log("generate image", genratedImage)
                     });
                 }, [70000]);
               });
@@ -542,7 +524,7 @@ function HomePage() {
 
         setSuccess("Payment Sent");
         return true;
-        console.log("Transaction\t", trans);
+        // console.log("Transaction\t", trans);
       } catch (e) {
         console.log("Error\t", e);
         return false;
@@ -581,7 +563,7 @@ function HomePage() {
   ////-------------- Old Landing Page
 
   // --------------- New Landing PAges
-
+// console.log(genratedImage)
   return (
     <div className=" relative">
       <header className="grid p-4 grid-cols-12 lg:max-w-7xl mx-auto">
@@ -840,7 +822,9 @@ function HomePage() {
             >
               Generate Banner
             </button>
-            <div>{text && <h1 className="text-center text-white my-3">{text}</h1>}</div>
+            <div>
+              {text && <h1 className="text-center text-white my-3">{text}</h1>}
+            </div>
             <div className="text-white flex justify-evenly items-center">
               <div className="mb-[0.125rem] block min-h-[1.5rem] pl-[1.5rem]">
                 <input
@@ -894,11 +878,13 @@ function HomePage() {
               />
             </div>
 
-            <div></div>
           </div>
 
-          {preview && genratedImage && !requestStart ? (
+          {preview || (genratedImage && !requestStart) ? (
             <ImageEditor
+            genratedImage={genratedImage}
+              publicKey={publicKey}
+              prompt={prompt}
               fg={preview}
               bg={genratedImage}
               setGenratedImage={setGenratedImage}
@@ -933,8 +919,9 @@ function HomePage() {
 
             <a
               onClick={() => {
-                setText("")
+                setText("");
                 setGenratedImage("");
+                setPreview("");
                 setPrompt("");
               }}
               href="#"
