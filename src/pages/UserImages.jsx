@@ -4,25 +4,27 @@ import { useEffect } from "react";
 import MobileMenuNav from "../Components/MobileMenu";
 import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const UserImages = () => {
   const { publicKey, connected } = useWallet();
   const [images, setImages] = useState([]);
+  const location = useLocation();
+  const { walletAddress } = location.state;
 
   const fetchUserImages = async () => {
     const response = await axios.get(
-      `http://localhost:5000/api/image/${publicKey}`
+      `http://localhost:5000/api/image/${publicKey ? publicKey : walletAddress}`
     );
     setImages(response.data);
     console.log(response.data);
   };
-  console.log(images);
+  // console.log(images);
   useEffect(() => {
-    if (connected) {
+    if (connected || walletAddress) {
       fetchUserImages();
     }
-  }, [connected]);
+  }, [connected, walletAddress]);
 
   return (
     <>
@@ -58,21 +60,23 @@ const UserImages = () => {
 
       <div className="h-screen pt-20 lg:py-5 w-full flex flex-col flex-wrap lg:flex-row justify-center items-center gap-20 overflow-y-scroll">
         {images.length > 0 ? (
-          images.map((item) => (
-            item.image !== "" &&
-            <div
-              key={item._id}
-              className="flex flex-col justify-center items-center gap-4"
-            >
-              <img
-                loading="lazy"
-                src={item?.image}
-                className="max-w-[70%]"
-                alt="image"
-              />
-              <p className="text-white text-center text-xl">{`"${item?.prompt}"`}</p>
-            </div>
-          ))
+          images.map(
+            (item) =>
+              item.image !== "" && (
+                <div
+                  key={item._id}
+                  className="flex flex-col justify-center items-center gap-4"
+                >
+                  <img
+                    loading="lazy"
+                    src={item?.image}
+                    className="max-w-[70%]"
+                    alt="image"
+                  />
+                  <p className="text-white text-center text-xl">{`"${item?.prompt}"`}</p>
+                </div>
+              )
+          )
         ) : (
           <div>
             <h1 className="text-white text-4xl font-bold text-center">

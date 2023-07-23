@@ -1,7 +1,7 @@
 import { useState } from "react"; // import state
 import { Link } from "react-router-dom";
 
-export default function Header({ connected }) {
+export default function Header({ connected, walletAddress }) {
   const [isNavOpen, setIsNavOpen] = useState(false); // initiate isNavOpen state with false
 
   return (
@@ -45,7 +45,7 @@ export default function Header({ connected }) {
               <li className="border-b border-gray-400 my-8 uppercase">
                 <a href="#">NFT</a>
               </li>
-              {connected && (
+              {(connected || walletAddress === "MetaMask") && (
                 <li className="border-b border-gray-400 my-8 uppercase">
                   <Link to="/user_images">Images</Link>
                 </li>

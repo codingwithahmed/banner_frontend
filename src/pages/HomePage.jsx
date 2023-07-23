@@ -44,7 +44,7 @@ function HomePage() {
   const [midjourney, setMidjourney] = useState(true);
   const [stableDiffusion, setStableDiffusion] = useState(false);
   const [text, setText] = useState("");
-
+// console.log("wallet", wallet)
   const handleUserMail = useCallback((e) => {
     setUserMail(e.target.value);
   }, []);
@@ -60,7 +60,7 @@ function HomePage() {
   useEffect(() => {
     console.log(connected);
     if (connected) {
-      console.log("Public Key\t", publicKey.toString());
+      // console.log("Public Key\t", publicKey.toString());
       setWalletAddress(publicKey.toString());
       setWalletName("Phantom");
     }
@@ -205,7 +205,7 @@ function HomePage() {
         reader.onloadend = () => {
           const base64data = reader.result;
           setPreview(base64data);
-          console.log(base64data);
+          // console.log(base64data);
         };
       });
   });
@@ -245,7 +245,7 @@ function HomePage() {
         if (tmp.length < 1) {
           setError("No NFT in your wallet");
         }
-        console.log("NFTS\t", tmp);
+        // console.log("NFTS\t", tmp);
       }
     },
     [walletAddress]
@@ -274,7 +274,7 @@ function HomePage() {
 
     reader.onload = () => {
       setPreview(reader.result);
-      console.log("Array\tBuffer\t:\t", reader.result);
+      // console.log("Array\tBuffer\t:\t", reader.result);
     };
     //const file2 = new File(file)
     // const dataURI = file2.arrayBuffer.toString()
@@ -302,6 +302,7 @@ function HomePage() {
 
         try {
           if (stableDiffusion && !midjourney) {
+            setText("It will take atleast 30 seconds to generate the image")
             axios
               .post("https://api.deepai.org/api/stable-diffusion", form, {
                 headers: {
@@ -309,7 +310,7 @@ function HomePage() {
                 },
               })
               .then((res) => {
-                console.log(res.data.output_url);
+                // console.log(res.data.output_url);
                 setRequestStart(false);
                 setGenratedImage(res.data.output_url);
                 // console.log(genratedImage);
@@ -321,7 +322,7 @@ function HomePage() {
             axios
               .post(
                 "https://api.midjourneyapi.io/v2/imagine",
-                { prompt: `${prompt}, 8k, --ar 3:2` },
+                { prompt: `${prompt}, --ar 3:1` },
                 {
                   headers: {
                     Authorization: "25b0879c-c126-4ce1-b240-3a3c0e84ca2c",
@@ -332,10 +333,10 @@ function HomePage() {
               )
               .then((res) => {
                 setText("It will take atleast 1 minute to generate the image");
-                console.log(res.data.taskId);
+                // console.log(res.data.taskId);
                 setTaskId(res.data.taskId);
                 setTimeout(() => {
-                  console.log(taskId);
+                  // console.log(taskId);
                   axios
                     .post(
                       "https://api.midjourneyapi.io/v2/result",
@@ -479,7 +480,7 @@ function HomePage() {
   const connectWalletMetamask = async () => {
     console.log("TESt");
     if (window.ethereum) {
-      console.log("TESt 2", await window.ethereum);
+      // console.log("TESt 2", await window.ethereum);
 
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
@@ -495,13 +496,13 @@ function HomePage() {
       } else {
         let wallet = accounts[0];
         setWalletName("MetaMask");
-        console.log(accounts);
+        // console.log(accounts);
         setWalletAddress(wallet);
       }
     } else {
       //alert("Please install Mask");
       //   console.log(window.phantom)
-      console.log("TESt 3");
+      // console.log("TESt 3");
 
       setError("Please Install MetaMask ");
     }
@@ -563,7 +564,7 @@ function HomePage() {
   ////-------------- Old Landing Page
 
   // --------------- New Landing PAges
-// console.log(genratedImage)
+  // console.log(genratedImage)
   return (
     <div className=" relative">
       <header className="grid p-4 grid-cols-12 lg:max-w-7xl mx-auto">
@@ -581,9 +582,10 @@ function HomePage() {
               {" "}
               NFT
             </a>
-            {connected && (
+            {(walletName === "Phantom" || walletName === "MetaMask" || wallet) && (
               <Link
                 to="/user_images"
+                state={{ walletAddress: walletAddress }}
                 className="hover:border-b-2 border-b-transparent   border-b-color hover:cursor-pointer"
               >
                 {" "}
@@ -591,15 +593,15 @@ function HomePage() {
               </Link>
             )}
           </nav>
-          <MobileMenuNav connected={connected} />
+          <MobileMenuNav connected={connected} walletAddres={walletAddress} />
         </div>
 
         <div className="lg:col-start-10 hidden z-[990] lg:flex -ml-72 lg:-ml-0 flex-row justify-between items-start lg:col-span-2">
-          {walletAddress ? (
+          {walletAddress || wallet ? (
             <>
               {" "}
               <WalletModalProvider>
-                {wallet && walletName == "Phantom" ? (
+                {wallet || walletName == "Phantom" ? (
                   <WalletDisconnectButton className="" />
                 ) : (walletName == "MetaMask") == "" ? (
                   ""
@@ -633,7 +635,7 @@ function HomePage() {
                   className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
                 >
                   <li>
-                    <a onClick={connectWalletMetamask} className="text-black">
+                    <a onClick={connectWalletMetamask} className="text-white">
                       MetaMask{" "}
                     </a>
                   </li>
@@ -877,12 +879,12 @@ function HomePage() {
                 onChange={handlePrompt}
               />
             </div>
-
           </div>
 
           {preview || (genratedImage && !requestStart) ? (
             <ImageEditor
-            genratedImage={genratedImage}
+              genratedImage={genratedImage}
+              walletAddress={walletAddress}
               publicKey={publicKey}
               prompt={prompt}
               fg={preview}

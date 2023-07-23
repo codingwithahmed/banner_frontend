@@ -8,7 +8,8 @@ function App({
   setGenratedImage,
   genratedImage, 
   prompt,
-  publicKey
+  publicKey,
+  walletAddress
 }) {
   const [selectedId, setSelectedId] = useState(null);
   const [image, setImage] = useState(null);
@@ -72,7 +73,7 @@ function App({
     const stageDataUrl = ref.current.toDataURL();
     axios
       .post(
-        `http://localhost:5000/api/image/${publicKey}`,
+        `http://localhost:5000/api/image/${publicKey? publicKey : walletAddress}`,
         {
           image: genratedImage,
           prompt: prompt,
