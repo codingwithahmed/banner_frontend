@@ -596,7 +596,7 @@ function HomePage() {
           <MobileMenuNav connected={connected} walletAddres={walletAddress} />
         </div>
 
-        <div className="lg:col-start-10 hidden z-[990] lg:flex -ml-72 lg:-ml-0 flex-row justify-between items-start lg:col-span-2">
+        <div className="lg:col-start-10 dark:text-white text-black hidden z-[990] lg:flex -ml-72 lg:-ml-0 flex-row justify-between items-start lg:col-span-2">
           {walletAddress || wallet ? (
             <>
               {" "}
@@ -635,7 +635,7 @@ function HomePage() {
                   className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
                 >
                   <li>
-                    <a onClick={connectWalletMetamask} className="text-white">
+                    <a onClick={connectWalletMetamask} className="">
                       MetaMask{" "}
                     </a>
                   </li>
