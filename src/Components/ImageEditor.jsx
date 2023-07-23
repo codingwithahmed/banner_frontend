@@ -18,11 +18,13 @@ function App({
   const imageRef = useRef(null);
   const trRef = useRef(null);
   const ref = useRef(null);
+  const [download, setDownload] = useState(false)
   const handleSelect = () => {
     trRef.current.nodes([imageRef.current]);
     trRef.current.getLayer().batchDraw();
     console.log("Called");
   };
+  const dataImage = genratedImage
 
   const handleImageUpload = (event) => {
     const uploadedImage = event.target.files[0];
@@ -54,12 +56,12 @@ function App({
     imgBg.src = bg;
     imgBg.crossOrigin = "anonymous";
     setBgImage(imgBg);
-    console.log("Image \t", imgBg);
+    // console.log("Image \t", imgBg);
   }, [fg, bg]);
 
   const handleSave = () => {
     // remove transformer from stage before saving
-    trRef.current.detach();
+trRef.current.detach();
     try {
       // get the stage as image data url
       const stageDataUrl = ref.current.toDataURL();
@@ -69,7 +71,7 @@ function App({
             publicKey ? publicKey : walletAddress
           }`,
           {
-            image: genratedImage,
+            image: stageDataUrl,
             prompt: prompt,
           },
           {
@@ -79,14 +81,14 @@ function App({
         .then((res) => {
           console.log(res);
           // setTaskId("");
-          setGenratedImage(stageDataUrl);
           setDisabled(false);
           // setBgImage(stageDataUrl)
         });
+      setGenratedImage(stageDataUrl);
 
       // setGenratedImage(stageDataUrl)
 
-      console.log(stageDataUrl.toDataURL());
+      // console.log(stageDataUrl.toDataURL());
     } catch (e) {
       console.error(e); // Log any errors to the console
     }
@@ -96,21 +98,43 @@ function App({
     // use stage data url as needed
   };
 
+  const handleDownload = (e) => {
+    // remove transformer from stage before saving
+    trRef.current.detach();
+    try {
+      // get the stage as image data url
+      const stageDataUrl = ref.current.toDataURL();
+      setGenratedImage(stageDataUrl);
+
+      // setGenratedImage(stageDataUrl)
+
+      console.log(stageDataUrl.toDataURL());
+    } catch (e) {
+      console.error(e); // Log any errors to the console
+    }
+    // add transformer back to stage
+    trRef.current.attachTo(trRef.current.getStage());
+    setDownload(true)
+
+    // use stage data url as needed
+  };
+
   return (
     <div className="flex flex-col items-center ">
       <h1 className="my-2 mx-4 text-white"> IMAGE EDITOR </h1>
-      <p className="text-white mb-3">
+      {/* <p className="text-white mb-3">
         You have to save the image in order to download it
-      </p>
+      </p> */}
       <div className="flex flex-row justify-between items-center ">
         <button className="btn mx-4 px-8 btn-warning" onClick={handleSave}>
           Save{" "}
         </button>
         <a
-          aria-disabled={disabled}
+          // aria-disabled={disabled}
+          onClick={handleDownload}
           className="btn mx-4 btn-success"
           download="output"
-          href={bg}
+          href={download && bg}
         >
           Download{" "}
         </a>

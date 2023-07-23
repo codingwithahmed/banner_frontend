@@ -716,7 +716,7 @@ function HomePage() {
         <SendSol />
       </div>
 
-      <div className="modal text-black" id="my-modal-2">
+      <div className="modal" id="my-modal-2">
         <div className="modal-box">
           {requestStart ? (
             <progress className="progress progress-info "></progress>
@@ -740,8 +740,8 @@ function HomePage() {
               {walletName.toLowerCase() == "phantom" ? (
                 ""
               ) : (
-                <div className="flex flex-row my-2 mr-2">
-                  <label className="mr-4 text-white">
+                <div className="flex flex-row my-2 mr-2 dark:text-white text-black">
+                  <label className="mr-4">
                     Select image from NFT
                   </label>
                   <input
@@ -756,12 +756,12 @@ function HomePage() {
               <div
                 className={
                   walletName.toLowerCase() == "phantom"
-                    ? "flex flex-row my-2"
-                    : "flex ml-2 flex-row my-2 pr-8"
+                    ? "flex flex-row my-2 dark:text-white text-black"
+                    : "flex ml-2 flex-row my-2 pr-8 dark:text-white text-black"
                 }
               >
-                <label className="pr-4 text-white">
-                  {"Select Stock Images"}
+                <label className="pr-4">
+                  Select Stock Images
                 </label>
                 <input
                   onChange={() => setGetFromStock(!getFromStock)}
@@ -781,7 +781,7 @@ function HomePage() {
                   Get NFT
                 </button>
               ) : (
-                <section className="my-2">
+                <section className="my-2 dark:text-white text-black">
                   <select
                     className="elect border-b-color out bg-transparent border-2 rounded focus:outline-none w-full max-w-xs"
                     onChange={handleNftSelect}
@@ -800,12 +800,12 @@ function HomePage() {
             )}
 
             {getFromStock && !getFromNft ? (
-              <section className="my-2">
+              <section className="my-2 dark:text-white text-black">
                 <select
-                  className="select text-white border-b-color out bg-transparent border-2 rounded focus:outline-none w-full max-w-xs"
+                  className="select dark:text-white text-black  border-b-color out bg-transparent border-2 rounded focus:outline-none w-full max-w-xs"
                   onChange={handleNftSelect}
                 >
-                  <option disabled selected className="text-white">
+                  <option disabled selected className="">
                     Select an Image
                   </option>
                   {/*
@@ -820,15 +820,15 @@ function HomePage() {
             <button
               onClick={handleGenrate}
               disabled={requestStart ? true : false}
-              className="px-8 cursor-pointer opacity-80 my-8 hover:opacity-100 py-3 bg-main text-white rounded-3xl"
+              className="px-8 cursor-pointer opacity-80 my-8 hover:opacity-100 py-3 bg-main rounded-3xl"
             >
               Generate Banner
             </button>
             <div>
-              {text && <h1 className="text-center text-white my-3">{text}</h1>}
+              {text && <h1 className="text-center dark:text-white text-black my-3">{text}</h1>}
             </div>
-            <div className="text-white flex justify-evenly items-center">
-              <div className="mb-[0.125rem] block min-h-[1.5rem] pl-[1.5rem]">
+            <div className=" flex justify-evenly items-center">
+              <div className="mb-[0.125rem] dark:text-white text-black block min-h-[1.5rem] pl-[1.5rem]">
                 <input
                   className="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 rounded-full border-2 border-solid border-neutral-300 dark:border-neutral-600"
                   type="radio"
@@ -848,7 +848,7 @@ function HomePage() {
                   Midjourney
                 </label>
               </div>
-              <div className="mb-[0.125rem] block min-h-[1.5rem] pl-[1.5rem]">
+              <div className="mb-[0.125rem] dark:text-white text-black block min-h-[1.5rem] pl-[1.5rem]">
                 <input
                   className="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 rounded-full border-2 border-solid border-neutral-300 dark:border-neutral-600"
                   type="radio"
@@ -870,8 +870,8 @@ function HomePage() {
               </div>
             </div>
 
-            <div className="flex border-[.7px] my-4 border-black px-2 py-1 rounded flex-row items-center">
-              <h1 className="text-white">Prompt : </h1>
+            <div className="flex border-[.7px] dark:text-white text-black my-4 border-black px-2 py-1 rounded flex-row items-center">
+              <h1 className="dark:text-white text-black">Prompt : </h1>
               <input
                 className="outline-none mx-4 flex-1"
                 type={"text"}
@@ -953,7 +953,7 @@ function HomePage() {
 
           <div className="my-2 p-1 hidden rounded bg-white w-5/6 lg:flex flex-row justify-between items-center">
             <input
-              className="w-full text-lg p-3 text-black bg-transparent outline-none"
+              className="w-full text-lg p-3 bg-transparent outline-none"
               type={"text"}
               value={prompt}
               onChange={handlePrompt}
